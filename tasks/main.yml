@@ -1,8 +1,29 @@
 ---
+- name: Set distribution release from which Ruby packages are installed
+  set_fact:
+    ruby_packages_distro_release: '/xenial'
+  when:
+        (ruby__version == '2.3' and
+        ((ansible_distribution == 'Debian' and ansible_distribution_version|int <= 8) or
+         (ansible_distribution == 'Ubuntu' and (ansible_distribution_release == 'precise' or
+                                                ansible_distribution_release == 'trusty'))))
+- name: Import Ubuntu archive keys
+  apt_key:
+    keyserver: 'keyserver.ubuntu.com'
+    id: '{{ item }}'
+  with_items:
+    - '3B4FE6ACC0B21F32'
+    - '40976EAF437D05B5'
+  when: xenial_repo_added | d () | bool
+
+- name: Add Ubuntu Xenial source repository
+  apt_repository:
+    repo: 'deb http://archive.ubuntu.com/ubuntu/ xenial main'
+  when: xenial_repo_added | d() | bool
 
 - name: Install Ruby packages
   package:
-    name: '{{ item }}'
+    name: '{{ item }}{{ ruby_packages_distro_release | d() }}'
     state: 'present'
   with_flattened:
     - '{{ ruby__base_packages }}'

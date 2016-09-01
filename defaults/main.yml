@@ -13,6 +13,12 @@
 #   Ruby APT packages
 # ---------------------
 
+# .. envvar:: ruby__version
+#
+# Ruby version to install. Possible values are 'default' (for the distribution
+# default version) and '2.3'.
+ruby__version: 'default'
+
 # .. envvar:: ruby__base_packages
 #
 # List of base APT packages to install.

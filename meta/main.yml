@@ -1,6 +1,16 @@
 ---
 
-dependencies: []
+dependencies:
+  - role: debops.apt_preferences
+    apt_preferences__dependent_list:
+        - package: 'ruby'
+          by_role: 'debops.ruby'
+          suffix: '_Ubuntu'
+          raw: |
+            Explanation: Install Ruby packages from Ubuntu Xenial
+            Package: ruby* libruby*
+            Pin: release o=Ubuntu,a=xenial
+            Pin-Priority: 600
 
 galaxy_info:
   author: 'Maciej Delmanowski'
@@ -11,10 +21,13 @@ galaxy_info:
   platforms:
   - name: Ubuntu
     versions:
-    - all
+    - precise
+    - trusty
+    - xenial
   - name: Debian
     versions:
-    - all
+    - wheezy
+    - jessie
   galaxy_tags:
   - development
   - programming
